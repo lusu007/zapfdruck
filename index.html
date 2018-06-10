@@ -29,7 +29,7 @@
             <div class="col s12">
                 <h4>1. Schritt: Sättigungsdruck ermitteln</h4>
 
-                <div class="col s6">
+                <div class="col l6">
                     <h5>Sättigungsdruck</h5>
                     <p>
                         Biertemperatur (Bierkellertemperatur) messen und den zugehörigen Wert einstellen.
@@ -67,7 +67,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col s6 temperature">
+                <div class="col l6 temperature">
                     <div class="temperature-heading">
                         <h5>Biertemperatur</h5>
                         <div id="temperature-slider"></div>
@@ -89,7 +89,7 @@
             <div class="col s12">
                 <h4>2. Schritt: Förderdruck ermitteln und zum Sättigungsdruck hinzurechnen</h4>
 
-                <div class="col s6">
+                <div class="col l6">
                     <h5>Förderhöhe</h5>
                     <p>Es wird pro Meter Förderhöhe (Fassboden bis Zapfhahn) 0,1 bar Druck benötigt. Dies gilt unanhängig vom Querschnitt der Leitung.</p>
                     <p><strong>Achtung: Bitte geben Sie die Förderhöhe mit einer Nachkommastelle an.</strong></p>
@@ -99,7 +99,7 @@
                         <span class="helper-text" data-error="Bitte geben Sie eine richtige Förderhöhe an">Bitte geben Sie hier die Förderhöhe in Meter an</span>
                     </div>
                 </div>
-                <div class="col s6">
+                <div class="col l6">
                     <h5>Leitungslänge</h5>
                     <p>
                         Die Reibungsverluste sind abhängig von der Länge und dem Querschnitt der Leitung.
@@ -118,7 +118,7 @@
                     <div class="input-field col s12">
                         <input type="number" class="validate" id="length" step="0.1" min="0.2" max="10" required>
                         <label for="length">Leitungslänge</label>
-                        <span class="helper-text" data-error="Bitte geben Sie eine richtige Förderhöhe an">Bitte geben Sie hier die Länge der Bierleitung in Meter an</span>
+                        <span class="helper-text" data-error="Ihre Bierleitung ist zu lang">Bitte geben Sie hier die Länge der Bierleitung in Meter an</span>
                     </div>
                 </div>
 
@@ -126,7 +126,7 @@
             <div class="col s12">
                 <h4>3. Schritt: Zapfdruck berechnen</h4>
 
-                <div class="col s6">
+                <div class="col l6">
                     <h5>Beispielrechnung</h5>
                     <p>Rechnen Sie die 3 Werte für Sättigungsdruck, Höhenunterschied und die Leitungslänge zusammen.</p>
                     <p><strong>Beispiel:</strong></p>
@@ -136,7 +136,7 @@
                         = 2,4 bar (Zapfdruck)
                     </p>
                 </div>
-                <div class="col s6">
+                <div class="col l6">
                     <h5>Ihr optimaler Zapfdruck</h5>
                     <p>Der optimale Zapfdruck bei Ihren Gegebenheiten beträgt:
 
