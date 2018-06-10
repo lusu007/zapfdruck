@@ -78,7 +78,6 @@ function calcPressure() {
   resultMin += height * 0.1;
   resultMax += height * 0.1;
 
-
   // Add thickness pressure
   resultMin += length * thicknessSelect.options[thicknessSelect.selectedIndex].value;
   resultMax += length * thicknessSelect.options[thicknessSelect.selectedIndex].value;
