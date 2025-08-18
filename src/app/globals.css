@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* Custom slider styles */
+.slider-track {
+  @apply relative w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full;
+}
+
+.slider-thumb {
+  @apply absolute w-6 h-6 bg-blue-500 rounded-full cursor-pointer shadow-lg transform -translate-y-2 hover:scale-110 transition-transform;
+}
+
+.slider-thumb:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Ensure proper dark mode support */
+.dark {
+  color-scheme: dark;
+}

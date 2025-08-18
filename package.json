@@ -1,0 +1,57 @@
+{
+  "name": "zapfdruck",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next out dist"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "15.4.6",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.400.0",
+    "next": "15.4.6",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.0",
+    "react-hot-toast": "^2.4.1",
+    "typescript": "^5",
+    "zod": "^4.0.17",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@tailwindcss/postcss": "^4.1.12",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.0",
+    "tailwindcss": "^4.1.12",
+    "typescript": "~5.5.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}
