@@ -2,12 +2,12 @@ import { ThicknessOption } from '@/types';
 
 export const THICKNESS_OPTIONS: ThicknessOption[] = [
   {
-    value: 0.72,
+    value: 0.004,
     label: '4 mm',
     description: '0,72 bar pro Meter',
   },
   {
-    value: 0.05,
+    value: 0.007,
     label: '7 mm',
     description: '0,05 bar pro Meter',
   },

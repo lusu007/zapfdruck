@@ -4,7 +4,7 @@ import { AlertCircle } from 'lucide-react';
 
 interface ValidatedInputProps<T extends FieldValues> {
   name: Path<T>;
-  control: Control<T, any>;
+  control: Control<T>;
   label: string;
   placeholder?: string;
   type?: 'text' | 'number' | 'email' | 'password';
@@ -114,37 +114,14 @@ export function ValidatedInput<T extends FieldValues>({
 }
 
 // Specialized number input with better validation
-export function ValidatedNumberInput<T extends FieldValues>({
-  name,
-  control,
-  label,
-  placeholder,
-  unit,
-  min,
-  max,
-  step = 0.01,
-  required = false,
-  disabled = false,
-  className = '',
-  error,
-  showValidation = true,
-}: Omit<ValidatedInputProps<T>, 'type'>) {
+export function ValidatedNumberInput<T extends FieldValues>(
+  props: Omit<ValidatedInputProps<T>, 'type'>
+) {
   return (
     <ValidatedInput
-      name={name}
-      control={control}
-      label={label}
-      placeholder={placeholder}
+      {...props}
       type="number"
-      unit={unit}
-      min={min}
-      max={max}
-      step={step}
-      required={required}
-      disabled={disabled}
-      className={className}
-      error={error}
-      showValidation={showValidation}
+      placeholder={props.placeholder || ''}
     />
   );
 }

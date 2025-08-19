@@ -87,6 +87,7 @@ export default function TemperatureSlider({
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
+    return undefined;
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const handleClick = useCallback(

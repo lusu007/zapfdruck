@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 
 interface ValidatedFormProps<T extends FieldValues> {
-  form: any; // Use any to avoid complex type issues with the custom hook
+  form: any; // TODO: Create proper type for form from useFormValidation
   onSubmit: (data: T) => void | Promise<void>;
   children: React.ReactNode;
   className?: string;
@@ -59,7 +59,10 @@ export function ValidatedForm<T extends FieldValues>({
                     key={field}
                     className="text-sm text-red-700 dark:text-red-300"
                   >
-                    • {error?.message as string}
+                    •{' '}
+                    {typeof error === 'string'
+                      ? error
+                      : (error as any)?.message || 'Ungültiger Wert'}
                   </li>
                 ))}
               </ul>

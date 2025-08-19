@@ -1,18 +1,55 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Beer, Zap, BarChart3, ChevronDown, ChevronUp } from 'lucide-react';
+import { Beer, ArrowRight } from 'lucide-react';
 import IntegratedCalculatorForm from '@/components/forms/IntegratedCalculatorForm';
-import ExampleCalculation from '@/components/ExampleCalculation';
-import ThemeToggle from '@/components/ThemeToggle';
+import LivePressureResult from '@/components/LivePressureResult';
 
 export default function Home() {
-  const [showDetails, setShowDetails] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
-  const handleCalculationComplete = (_data: Record<string, unknown>) => {
-    // Handle calculation completion
-  };
+  // Memoized step indicators
+  const stepIndicators = useMemo(() => [1, 2, 3], []);
+
+  const handleStepChange = useCallback((step: number) => {
+    setCurrentStep(step);
+  }, []);
+
+  const handleCalculationComplete = useCallback(
+    (_data: Record<string, unknown>) => {
+      // Handle calculation completion
+    },
+    []
+  );
+
+  const handleScrollToCalculator = useCallback(() => {
+    const element = document.getElementById('calculator-form');
+    if (element) {
+      const navbarHeight = 80;
+      const sectionTitleHeight = 200;
+      const elementPosition =
+        element.offsetTop - navbarHeight - sectionTitleHeight;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
+  // Memoized step status
+  const getStepStatus = useCallback(
+    (step: number) => {
+      if (step < currentStep || (step === 3 && currentStep === 4)) {
+        return 'completed';
+      }
+      if (step === currentStep) {
+        return 'active';
+      }
+      return 'pending';
+    },
+    [currentStep]
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
@@ -33,7 +70,6 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -44,133 +80,139 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center py-40"
         >
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
+          <div className="max-w-4xl mx-auto px-4">
+            {/* Hero Icon */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="mb-8"
+            >
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl shadow-lg">
+                <Beer className="w-12 h-12 text-white" />
+              </div>
+            </motion.div>
+
+            <h2 className="text-5xl font-bold text-slate-900 dark:text-white mb-6">
               Optimaler Druck für Ihr Zapfsystem
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-              Berechnen Sie den perfekten Druck für Ihr Bierzapfsystem
+            <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed mb-6 max-w-2xl mx-auto">
+              Berechnen Sie den perfekten Druck für Ihr Bierzapfsystem in nur 3
+              einfachen Schritten
             </p>
+            <p className="text-lg text-slate-500 dark:text-slate-500 leading-relaxed mb-8 max-w-3xl mx-auto">
+              Unser professioneller Rechner berücksichtigt Temperatur,
+              Förderhöhe und Leitungslänge für präzise Ergebnisse. Perfekt für
+              Brauereien, Gastronomie und Hobby-Brauer.
+            </p>
+
+            {/* Call to Action */}
+            <motion.button
+              onClick={handleScrollToCalculator}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+            >
+              <span>Jetzt berechnen</span>
+              <ArrowRight className="w-6 h-6" />
+            </motion.button>
           </div>
         </motion.div>
 
-        {/* Integrated Calculator Form */}
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-          {/* Main Calculator Column */}
-          <div className="xl:col-span-3">
-            <IntegratedCalculatorForm onComplete={handleCalculationComplete} />
-          </div>
+        {/* Separator */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-600 to-transparent mb-16" />
 
-          {/* Sidebar - Example Calculation */}
-          <div className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden"
-            >
-              <div className="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-white/20 rounded-lg">
-                    <BarChart3 className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">
-                      Beispielrechnung
-                    </h3>
-                    <p className="text-teal-100 text-sm">
-                      So funktioniert die Berechnung
-                    </p>
-                  </div>
-                </div>
-              </div>
+        {/* Calculator Section */}
+        <div className="max-w-6xl mx-auto">
+          {/* Section Title */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+              Druck berechnen
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Füllen Sie die Felder Schritt für Schritt aus
+            </p>
+          </motion.div>
 
-              <div className="p-6">
-                <ExampleCalculation />
-              </div>
-            </motion.div>
-
-            {/* Collapsible Details */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden"
-            >
-              <button
-                onClick={() => setShowDetails(!showDetails)}
-                className="w-full bg-gradient-to-r from-slate-500 to-slate-600 px-6 py-4 text-left"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white/20 rounded-lg">
-                      <BarChart3 className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">
-                        Weitere Informationen
-                      </h3>
-                      <p className="text-slate-100 text-sm">
-                        Details zur Berechnung
-                      </p>
-                    </div>
+          {/* Step Indicators */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="flex items-center justify-center mb-8"
+          >
+            <div className="flex items-center gap-4">
+              {stepIndicators.map((step, index) => (
+                <div key={step} className="flex items-center">
+                  <div className="flex flex-col items-center gap-2">
+                    <button
+                      onClick={() => {
+                        // Only allow navigation to completed steps or the current step
+                        if (
+                          getStepStatus(step) === 'completed' ||
+                          getStepStatus(step) === 'active'
+                        ) {
+                          setCurrentStep(step);
+                        }
+                      }}
+                      className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all ${
+                        getStepStatus(step) === 'completed'
+                          ? 'bg-green-500 border-green-500 text-white shadow-lg hover:bg-green-600 hover:shadow-xl cursor-pointer'
+                          : getStepStatus(step) === 'active'
+                            ? 'bg-blue-500 border-blue-500 text-white shadow-lg cursor-pointer'
+                            : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 cursor-not-allowed'
+                      }`}
+                      disabled={getStepStatus(step) === 'pending'}
+                      title={
+                        getStepStatus(step) === 'completed'
+                          ? `Zurück zu Schritt ${step}`
+                          : getStepStatus(step) === 'active'
+                            ? `Aktueller Schritt ${step}`
+                            : `Schritt ${step} noch nicht verfügbar`
+                      }
+                    >
+                      <span className="font-semibold text-lg">{step}</span>
+                    </button>
                   </div>
-                  {showDetails ? (
-                    <ChevronUp className="w-5 h-5 text-white" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-white" />
+                  {index < stepIndicators.length - 1 && (
+                    <div
+                      className={`w-20 h-1 mx-6 transition-colors ${
+                        getStepStatus(step) === 'completed'
+                          ? 'bg-green-500'
+                          : 'bg-slate-300 dark:bg-slate-600'
+                      }`}
+                    />
                   )}
                 </div>
-              </button>
+              ))}
+            </div>
+          </motion.div>
 
-              {showDetails && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="p-6 space-y-4"
-                >
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-slate-900 dark:text-white">
-                      Sättigungsdruck
-                    </h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
-                      Der Sättigungsdruck hängt von der Biertemperatur ab. Pro
-                      Grad Celsius steigt der Druck um etwa 0,1 bar.
-                    </p>
-                  </div>
+          {/* Main Content Grid */}
+          <div
+            id="calculator-form"
+            className="grid grid-cols-1 xl:grid-cols-4 gap-8"
+          >
+            {/* Main Calculator Column */}
+            <div className="xl:col-span-3">
+              <IntegratedCalculatorForm
+                onComplete={handleCalculationComplete}
+                onStepChange={handleStepChange}
+                currentStep={currentStep}
+              />
+            </div>
 
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-slate-900 dark:text-white">
-                      Förderhöhe
-                    </h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
-                      Pro Meter Höhenunterschied (Fassboden bis Zapfhahn) werden
-                      0,1 bar zusätzlicher Druck benötigt.
-                    </p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-slate-900 dark:text-white">
-                      Leitungslänge
-                    </h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
-                      Die Reibungsverluste hängen vom Durchmesser ab: 4mm (0,72
-                      bar/m), 7mm (0,05 bar/m), 10mm (0,01 bar/m).
-                    </p>
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-200 dark:border-slate-700">
-                    <p className="text-xs text-slate-500 dark:text-slate-500">
-                      Es wird keine Gewähr über Richtigkeit der Werte
-                      übernommen!
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-            </motion.div>
+            {/* Sidebar - Live Results Only */}
+            <div>
+              {/* Live Pressure Result */}
+              <LivePressureResult />
+            </div>
           </div>
         </div>
       </main>
@@ -181,19 +223,42 @@ export default function Home() {
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
               <div className="p-2 bg-amber-500 rounded-lg">
-                <Zap className="w-4 h-4 text-white" />
+                <Beer className="w-4 h-4 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                 Zapfdruck Rechner
               </h3>
             </div>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 max-w-2xl mx-auto">
-              Professioneller Bierzapfdruck-Rechner für optimale Ergebnisse
-            </p>
+            <div className="mb-4">
+              <p className="text-xs text-slate-500 dark:text-slate-500 max-w-2xl mx-auto mt-2">
+                Es wird keine Gewähr über Richtigkeit der Werte übernommen! Die
+                Berechnungen basieren auf allgemeinen Formeln und können je nach
+                spezifischen Bedingungen variieren.
+              </p>
+            </div>
             <div className="flex items-center justify-center gap-6 text-xs text-slate-500 dark:text-slate-500">
-              <span>© 2024 Zapfdruck Rechner</span>
+              <span>
+                © {new Date().getFullYear()} Scelus Development (Lukas Jost)
+              </span>
               <span>•</span>
-              <span>Next.js • TypeScript • Tailwind CSS</span>
+              <span>Wir ❤️ Open Source</span>
+              <span>•</span>
+              <a
+                href="https://github.com/lusu007/zapfdruck"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-amber-500 dark:hover:text-amber-400 transition-colors flex items-center gap-1"
+                title="View on GitHub"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+                GitHub
+              </a>
             </div>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import { useForm, UseFormProps, FieldValues, Path } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { toast } from 'react-hot-toast';
+
+import { z } from 'zod';
 
 interface UseFormValidationOptions<T extends FieldValues>
   extends Omit<UseFormProps<T>, 'resolver'> {
@@ -65,7 +66,10 @@ export function useFormValidation<T extends FieldValues>({
 
   // Helper function to check if field is valid
   const isFieldValid = (fieldName: Path<T>): boolean => {
-    return !formState.errors[fieldName] && formState.dirtyFields[fieldName];
+    return (
+      !formState.errors[fieldName] &&
+      (formState.dirtyFields as Record<string, unknown>)[fieldName]
+    );
   };
 
   // Helper function to check if form is valid
@@ -107,8 +111,8 @@ export function useFieldValidation<T extends FieldValues>(
 ) {
   const error = form.getFieldError(fieldName);
   const isValid = form.isFieldValid(fieldName);
-  const isDirty = form.formState.dirtyFields[fieldName];
-  const isTouched = form.formState.touchedFields[fieldName];
+  const isDirty = (form.formState.dirtyFields as any)[fieldName];
+  const isTouched = (form.formState.touchedFields as any)[fieldName];
 
   return {
     error,

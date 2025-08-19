@@ -1,17 +1,18 @@
 'use client';
 
 import { useController } from 'react-hook-form';
-import { Thermometer, Info, AlertCircle, CheckCircle } from 'lucide-react';
+import { Thermometer, Info, AlertCircle } from 'lucide-react';
 import { Control } from 'react-hook-form';
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { TEMPERATURE_RANGE } from '@/constants';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ValidatedTemperatureSliderProps {
-  control: Control<any>;
+  control: Control<any>; // TODO: Create proper type for form control
   name: string;
   showValidation?: boolean;
   error?: string;
+  onUserInteraction?: () => void;
 }
 
 export default function ValidatedTemperatureSlider({
@@ -19,6 +20,7 @@ export default function ValidatedTemperatureSlider({
   name,
   showValidation = true,
   error,
+  onUserInteraction,
 }: ValidatedTemperatureSliderProps) {
   const {
     field: { value, onChange },
@@ -52,8 +54,9 @@ export default function ValidatedTemperatureSlider({
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(thumb);
+      onUserInteraction?.();
     },
-    []
+    [onUserInteraction]
   );
 
   const handleMouseMove = useCallback(
@@ -72,12 +75,14 @@ export default function ValidatedTemperatureSlider({
       if (isDragging === 'min') {
         const newMin = Math.min(newValue, currentMax - 1);
         onChange([newMin, currentMax]);
+        onUserInteraction?.();
       } else {
         const newMax = Math.max(newValue, currentMin + 1);
         onChange([currentMin, newMax]);
+        onUserInteraction?.();
       }
     },
-    [isDragging, onChange, rangeValue, min, max]
+    [isDragging, onChange, rangeValue, min, max, onUserInteraction]
   );
 
   const handleMouseUp = useCallback(() => {
@@ -93,6 +98,7 @@ export default function ValidatedTemperatureSlider({
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
+    return undefined;
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const handleClick = useCallback(
@@ -119,27 +125,19 @@ export default function ValidatedTemperatureSlider({
         const newMax = Math.max(newValue, currentMin + 1);
         onChange([currentMin, newMax]);
       }
+
+      onUserInteraction?.();
     },
-    [isDragging, onChange, rangeValue, min, max]
+    [isDragging, onChange, rangeValue, min, max, onUserInteraction]
   );
 
-  const handleInfoClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowInfo(!showInfo);
+  const handleInfoMouseEnter = () => {
+    setShowInfo(true);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
-        setShowInfo(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  const handleInfoMouseLeave = () => {
+    setShowInfo(false);
+  };
 
   return (
     <div className="space-y-4">
@@ -149,38 +147,41 @@ export default function ValidatedTemperatureSlider({
           <h3 className="font-semibold text-slate-900 dark:text-white">
             Biertemperatur
           </h3>
-          {showValidation && (
+          {showValidation && hasError && (
             <div className="flex items-center gap-1">
-              {hasError ? (
-                <AlertCircle className="w-4 h-4 text-red-500" />
-              ) : isValid ? (
-                <CheckCircle className="w-4 h-4 text-green-500" />
-              ) : null}
+              <AlertCircle className="w-4 h-4 text-red-500" />
             </div>
           )}
         </div>
         <div className="relative">
           <button
             type="button"
-            onClick={handleInfoClick}
+            onMouseEnter={handleInfoMouseEnter}
+            onMouseLeave={handleInfoMouseLeave}
             className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
             aria-label="Informationen zur Temperatur"
           >
             <Info className="w-4 h-4" />
           </button>
-          {showInfo && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              ref={infoRef}
-              className="absolute right-0 top-8 w-64 p-3 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 text-sm z-10"
-            >
-              <p className="text-slate-600 dark:text-slate-400">
-                Wählen Sie den Temperaturbereich Ihres Biers. Der
-                Sättigungsdruck wird automatisch aus der Temperatur berechnet.
-              </p>
-            </motion.div>
-          )}
+          <AnimatePresence>
+            {showInfo && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                ref={infoRef}
+                onMouseEnter={handleInfoMouseEnter}
+                onMouseLeave={handleInfoMouseLeave}
+                className="absolute right-0 top-8 w-64 p-3 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 text-sm z-10"
+              >
+                <p className="text-slate-600 dark:text-slate-400">
+                  Wählen Sie den Temperaturbereich Ihres Biers. Der
+                  Sättigungsdruck wird automatisch aus der Temperatur berechnet.
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -188,11 +189,7 @@ export default function ValidatedTemperatureSlider({
         <div
           ref={sliderRef}
           className={`relative h-12 cursor-pointer ${
-            hasError
-              ? 'ring-2 ring-red-300'
-              : isValid
-                ? 'ring-2 ring-green-300'
-                : ''
+            hasError ? 'ring-2 ring-red-300' : ''
           }`}
           onClick={handleClick}
         >
@@ -202,7 +199,7 @@ export default function ValidatedTemperatureSlider({
           {/* Selected range */}
           <div
             className={`absolute top-1/2 -translate-y-1/2 h-2 rounded-full transition-colors ${
-              hasError ? 'bg-red-500' : isValid ? 'bg-green-500' : 'bg-blue-500'
+              hasError ? 'bg-red-500' : 'bg-blue-500'
             }`}
             style={{
               left: `${getPercentage(rangeValue[0])}%`,
@@ -213,11 +210,7 @@ export default function ValidatedTemperatureSlider({
           {/* Min thumb */}
           <div
             className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white dark:bg-slate-300 rounded-full shadow-lg border-2 cursor-pointer hover:scale-110 transition-all ${
-              hasError
-                ? 'border-red-500'
-                : isValid
-                  ? 'border-green-500'
-                  : 'border-blue-500'
+              hasError ? 'border-red-500' : 'border-blue-500'
             }`}
             style={{ left: `calc(${getPercentage(rangeValue[0])}% - 12px)` }}
             onMouseDown={e => handleMouseDown(e, 'min')}
@@ -235,11 +228,7 @@ export default function ValidatedTemperatureSlider({
           {/* Max thumb */}
           <div
             className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white dark:bg-slate-300 rounded-full shadow-lg border-2 cursor-pointer hover:scale-110 transition-all ${
-              hasError
-                ? 'border-red-500'
-                : isValid
-                  ? 'border-green-500'
-                  : 'border-blue-500'
+              hasError ? 'border-red-500' : 'border-blue-500'
             }`}
             style={{ left: `calc(${getPercentage(rangeValue[1])}% - 12px)` }}
             onMouseDown={e => handleMouseDown(e, 'max')}

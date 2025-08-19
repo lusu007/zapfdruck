@@ -7,9 +7,11 @@ import { THICKNESS_OPTIONS, HEIGHT_RANGE, LENGTH_RANGE } from '@/constants';
 import { ValidatedNumberInput } from './ValidatedInput';
 import { useFieldValidation } from '@/hooks/useFormValidation';
 
+import { Control, FieldValues } from 'react-hook-form';
+
 interface SystemParametersInputsProps {
-  control: any; // Use any to avoid complex type issues
-  form: any; // Use the form instance from useFormValidation
+  control: Control<FieldValues>;
+  form: any; // TODO: Create proper type for form from useFormValidation
 }
 
 export default function SystemParametersInputs({
@@ -17,6 +19,14 @@ export default function SystemParametersInputs({
   form,
 }: SystemParametersInputsProps) {
   const [selectedThickness, setSelectedThickness] = React.useState(0.01);
+
+  // Set initial thickness value when component mounts
+  React.useEffect(() => {
+    const currentThickness = form.watch('thickness');
+    if (currentThickness === 0) {
+      form.setFieldValue('thickness', 0.01);
+    }
+  }, [form]);
 
   const handleThicknessChange = (value: number) => {
     setSelectedThickness(value);
