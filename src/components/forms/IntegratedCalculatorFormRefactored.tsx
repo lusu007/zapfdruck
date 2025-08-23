@@ -90,8 +90,8 @@ export default function IntegratedCalculatorFormRefactored({
     const canProceedToStep2 = hasValidTemperatureSelection;
 
     // Manual validation for pipe parameters
-    const hasValidLength = lengthValue > 0;
-    const hasValidThickness = thicknessValue > 0;
+    const hasValidLength = lengthValue && lengthValue > 0;
+    const hasValidThickness = thicknessValue && thicknessValue > 0;
 
     const canProceedToStep3 = hasValidLength && hasValidThickness;
 
@@ -119,9 +119,9 @@ export default function IntegratedCalculatorFormRefactored({
       temperatureValue[0] <= temperatureValue[1] &&
       temperatureValue[1] - temperatureValue[0] >= 0.5;
 
-    const hasValidHeight = heightValue > 0;
-    const hasValidLength = lengthValue > 0;
-    const hasValidThickness = thicknessValue > 0;
+    const hasValidHeight = heightValue && heightValue > 0;
+    const hasValidLength = lengthValue && lengthValue > 0;
+    const hasValidThickness = thicknessValue && thicknessValue > 0;
 
     if (
       hasValidTemperature &&

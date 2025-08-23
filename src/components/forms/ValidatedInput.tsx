@@ -57,6 +57,11 @@ export function ValidatedInput<T extends FieldValues>({
               <div className="relative">
                 <input
                   {...field}
+                  value={
+                    field.value === undefined || field.value === null
+                      ? ''
+                      : field.value
+                  }
                   id={name}
                   type={type}
                   placeholder={placeholder}
@@ -80,7 +85,9 @@ export function ValidatedInput<T extends FieldValues>({
                   onChange={e => {
                     const value =
                       type === 'number'
-                        ? parseFloat(e.target.value) || 0
+                        ? e.target.value === ''
+                          ? undefined
+                          : parseFloat(e.target.value) || undefined
                         : e.target.value;
                     field.onChange(value);
                   }}
