@@ -15,8 +15,10 @@ import { ValidatedRangeInput } from './ValidatedRangeInput';
 import { useFieldValidation } from '@/hooks/useFormValidation';
 
 interface ValidatedFormInputsProps {
-  control: any; // Use any to avoid complex type issues
-  form: any; // Use the form instance from useFormValidation
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: any;
 }
 
 export default function ValidatedFormInputs({

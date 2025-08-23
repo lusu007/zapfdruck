@@ -6,6 +6,13 @@ export interface PressureCalculation {
   thickness: number;
   resultMin: number;
   resultMax: number;
+  breakdown: {
+    saturationMin: number;
+    saturationMax: number;
+    heightPressure: number;
+    frictionPressure: number;
+  };
+  recommended: number;
 }
 
 export interface TemperaturePressure {

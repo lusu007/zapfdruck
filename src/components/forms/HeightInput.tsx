@@ -4,8 +4,10 @@ import { Settings } from 'lucide-react';
 import { ValidatedNumberInput } from './ValidatedInput';
 
 interface HeightInputProps {
-  control: any; // TODO: Create proper type for form control
-  form: any; // TODO: Create proper type for form
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: any;
   className?: string;
 }
 

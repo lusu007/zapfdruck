@@ -163,7 +163,7 @@ export default function Home() {
                       }}
                       className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all ${
                         getStepStatus(step) === 'completed'
-                          ? 'bg-green-500 border-green-500 text-white shadow-lg hover:bg-green-600 hover:shadow-xl cursor-pointer'
+                          ? 'bg-blue-500 border-blue-500 text-white shadow-lg hover:bg-blue-600 hover:shadow-xl cursor-pointer'
                           : getStepStatus(step) === 'active'
                             ? 'bg-blue-500 border-blue-500 text-white shadow-lg cursor-pointer'
                             : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 cursor-not-allowed'
@@ -184,7 +184,7 @@ export default function Home() {
                     <div
                       className={`w-20 h-1 mx-6 transition-colors ${
                         getStepStatus(step) === 'completed'
-                          ? 'bg-green-500'
+                          ? 'bg-blue-500'
                           : 'bg-slate-300 dark:bg-slate-600'
                       }`}
                     />

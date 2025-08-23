@@ -208,9 +208,9 @@ export default function IntegratedCalculatorFormRefactored({
           }}
         >
           {/* Step 1: Temperature Selection */}
-          <div className="w-1/3 pr-8">
+          <div className="w-1/3">
             <StepContent
-              step={STEP_CONFIG[0]}
+              step={STEP_CONFIG[0]!}
               isActive={getStepStatus(1) === 'active'}
               isCompleted={getStepStatus(1) === 'completed'}
             >
@@ -238,9 +238,9 @@ export default function IntegratedCalculatorFormRefactored({
           </div>
 
           {/* Step 2: Pipe Parameters */}
-          <div className="w-1/3 px-4">
+          <div className="w-1/3">
             <StepContent
-              step={STEP_CONFIG[1]}
+              step={STEP_CONFIG[1]!}
               isActive={getStepStatus(2) === 'active'}
               isCompleted={getStepStatus(2) === 'completed'}
             >
@@ -261,9 +261,9 @@ export default function IntegratedCalculatorFormRefactored({
           </div>
 
           {/* Step 3: Height Parameters */}
-          <div className="w-1/3 pl-8">
+          <div className="w-1/3">
             <StepContent
-              step={STEP_CONFIG[2]}
+              step={STEP_CONFIG[2]!}
               isActive={getStepStatus(3) === 'active'}
               isCompleted={false}
             >

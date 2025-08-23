@@ -7,11 +7,11 @@ import { THICKNESS_OPTIONS, HEIGHT_RANGE, LENGTH_RANGE } from '@/constants';
 import { ValidatedNumberInput } from './ValidatedInput';
 import { useFieldValidation } from '@/hooks/useFormValidation';
 
-import { Control, FieldValues } from 'react-hook-form';
-
 interface SystemParametersInputsProps {
-  control: Control<FieldValues>;
-  form: any; // TODO: Create proper type for form from useFormValidation
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: any;
 }
 
 export default function SystemParametersInputs({

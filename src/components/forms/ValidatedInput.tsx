@@ -72,7 +72,7 @@ export function ValidatedInput<T extends FieldValues>({
                       hasError
                         ? 'border-red-300 focus:ring-red-500 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400'
                         : isValid
-                          ? 'border-green-300 focus:ring-green-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white'
+                          ? 'border-blue-300 focus:ring-blue-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white'
                           : 'border-slate-300 bg-white dark:bg-slate-800 dark:border-slate-600 text-slate-900 dark:text-white'
                     }
                     ${unit ? 'pr-12' : ''}

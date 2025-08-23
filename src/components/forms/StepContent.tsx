@@ -18,12 +18,12 @@ export default function StepContent({
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border transition-all h-[600px] flex flex-col ${
+      className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border transition-all min-h-[600px] flex flex-col ${
         isActive
           ? step.borderColor
           : isCompleted
-            ? 'border-green-200 dark:border-green-700 opacity-75'
-            : 'border-slate-200/50 dark:border-slate-700/50 opacity-30'
+            ? step.borderColor + ' opacity-75'
+            : step.borderColor + ' opacity-30'
       } ${className}`}
     >
       <div
@@ -31,8 +31,8 @@ export default function StepContent({
           isActive
             ? `bg-gradient-to-r ${step.gradient}`
             : isCompleted
-              ? 'bg-gradient-to-r from-green-500 to-green-600'
-              : 'bg-gradient-to-r from-slate-400 to-slate-500'
+              ? `bg-gradient-to-r ${step.gradient} opacity-75`
+              : `bg-gradient-to-r ${step.gradient} opacity-30`
         }`}
       >
         <div className="flex items-center justify-between">

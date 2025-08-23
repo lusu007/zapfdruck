@@ -47,18 +47,18 @@ const STEP_CONFIG = [
     title: 'Leitungsdaten',
     subtitle: 'Durchmesser und Länge',
     icon: Settings,
-    color: 'green',
-    gradient: 'from-green-500 to-green-600',
-    borderColor: 'border-green-200 dark:border-green-700',
+    color: 'blue',
+    gradient: 'from-blue-500 to-blue-600',
+    borderColor: 'border-blue-200 dark:border-blue-700',
   },
   {
     id: 3,
     title: 'Förderhöhe',
     subtitle: 'Höhendifferenz',
     icon: Settings,
-    color: 'indigo',
-    gradient: 'from-indigo-500 to-purple-600',
-    borderColor: 'border-indigo-200 dark:border-indigo-700',
+    color: 'blue',
+    gradient: 'from-blue-500 to-blue-600',
+    borderColor: 'border-blue-200 dark:border-blue-700',
   },
 ] as const;
 
@@ -245,17 +245,17 @@ export default function IntegratedCalculatorForm({
           }}
         >
           {/* Step 1: Temperature Selection */}
-          <div className="w-1/3 pr-8">
+          <div className="w-1/3">
             <motion.div
               id="step-1"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border transition-all h-[600px] flex flex-col ${
+              className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border transition-all min-h-[600px] flex flex-col ${
                 getStepStatus(1) === 'active'
                   ? STEP_CONFIG[0].borderColor
                   : getStepStatus(1) === 'completed'
-                    ? 'border-green-200 dark:border-green-700 opacity-75'
-                    : 'border-slate-200/50 dark:border-slate-700/50'
+                    ? STEP_CONFIG[0].borderColor + ' opacity-75'
+                    : STEP_CONFIG[0].borderColor + ' opacity-30'
               }`}
             >
               <div
@@ -263,8 +263,8 @@ export default function IntegratedCalculatorForm({
                   getStepStatus(1) === 'active'
                     ? `bg-gradient-to-r ${STEP_CONFIG[0].gradient}`
                     : getStepStatus(1) === 'completed'
-                      ? 'bg-gradient-to-r from-green-500 to-green-600'
-                      : 'bg-gradient-to-r from-slate-400 to-slate-500'
+                      ? `bg-gradient-to-r ${STEP_CONFIG[0].gradient} opacity-75`
+                      : `bg-gradient-to-r ${STEP_CONFIG[0].gradient} opacity-30`
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -333,18 +333,18 @@ export default function IntegratedCalculatorForm({
           </div>
 
           {/* Step 2: Pipe Parameters */}
-          <div className="w-1/3 px-4">
+          <div className="w-1/3">
             <motion.div
               id="step-2"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border transition-all h-[600px] flex flex-col ${
+              className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border transition-all min-h-[600px] flex flex-col ${
                 getStepStatus(2) === 'active'
                   ? STEP_CONFIG[1].borderColor
                   : getStepStatus(2) === 'completed'
-                    ? 'border-green-200 dark:border-green-700 opacity-75'
-                    : 'border-slate-200/50 dark:border-slate-700/50 opacity-30'
+                    ? STEP_CONFIG[1].borderColor + ' opacity-75'
+                    : STEP_CONFIG[1].borderColor + ' opacity-30'
               }`}
             >
               <div
@@ -352,8 +352,8 @@ export default function IntegratedCalculatorForm({
                   getStepStatus(2) === 'active'
                     ? `bg-gradient-to-r ${STEP_CONFIG[1].gradient}`
                     : getStepStatus(2) === 'completed'
-                      ? 'bg-gradient-to-r from-green-500 to-green-600'
-                      : 'bg-gradient-to-r from-slate-400 to-slate-500'
+                      ? `bg-gradient-to-r ${STEP_CONFIG[1].gradient} opacity-75`
+                      : `bg-gradient-to-r ${STEP_CONFIG[1].gradient} opacity-30`
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -410,7 +410,7 @@ export default function IntegratedCalculatorForm({
                       disabled={!validationStates.canProceedToStep3}
                       className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
                         validationStates.canProceedToStep3
-                          ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl'
+                          ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
                       }`}
                     >
@@ -424,23 +424,23 @@ export default function IntegratedCalculatorForm({
           </div>
 
           {/* Step 3: Height Parameters */}
-          <div className="w-1/3 pl-8">
+          <div className="w-1/3">
             <motion.div
               id="step-3"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border transition-all h-[600px] flex flex-col ${
+              className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border transition-all min-h-[600px] flex flex-col ${
                 getStepStatus(3) === 'active'
                   ? STEP_CONFIG[2].borderColor
-                  : 'border-slate-200/50 dark:border-slate-700/50 opacity-30'
+                  : STEP_CONFIG[2].borderColor + ' opacity-30'
               }`}
             >
               <div
                 className={`px-6 py-4 transition-all rounded-t-2xl ${
                   getStepStatus(3) === 'active'
                     ? `bg-gradient-to-r ${STEP_CONFIG[2].gradient}`
-                    : 'bg-gradient-to-r from-slate-400 to-slate-500'
+                    : `bg-gradient-to-r ${STEP_CONFIG[2].gradient} opacity-30`
                 }`}
               >
                 <div className="flex items-center justify-between">

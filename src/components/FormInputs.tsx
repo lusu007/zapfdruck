@@ -73,7 +73,7 @@ export default function FormInputs({ control }: FormInputsProps) {
             max={HEIGHT_RANGE.max}
             value={heightController.field.value || ''}
             onChange={heightController.field.onChange}
-            className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+            className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
             placeholder="z.B. 3.0"
           />
         </div>

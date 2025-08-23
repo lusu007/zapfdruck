@@ -4,7 +4,7 @@ import { AlertCircle, CheckCircle, Thermometer } from 'lucide-react';
 
 interface ValidatedRangeInputProps<T extends FieldValues> {
   name: Path<T>;
-  control: Control<T, any>;
+  control: Control<T>;
   label: string;
   min: number;
   max: number;
@@ -130,7 +130,7 @@ export function ValidatedRangeInput<T extends FieldValues>({
                             hasError
                               ? 'border-red-300 bg-red-50 focus:ring-red-500'
                               : isValid
-                                ? 'border-green-300 bg-green-50 focus:ring-green-500'
+                                ? 'border-blue-300 bg-blue-50 focus:ring-blue-500'
                                 : 'border-slate-300 bg-white dark:bg-slate-800 dark:border-slate-600'
                           }
                           pr-12
@@ -149,7 +149,7 @@ export function ValidatedRangeInput<T extends FieldValues>({
                     {hasError ? (
                       <AlertCircle className="w-5 h-5 text-red-500" />
                     ) : isValid ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-blue-500" />
                     ) : null}
                   </div>
                 )}

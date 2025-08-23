@@ -2,13 +2,14 @@
 
 import { useController } from 'react-hook-form';
 import { Thermometer, Info, AlertCircle } from 'lucide-react';
-import { Control } from 'react-hook-form';
+
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { TEMPERATURE_RANGE } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ValidatedTemperatureSliderProps {
-  control: Control<any>; // TODO: Create proper type for form control
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any;
   name: string;
   showValidation?: boolean;
   error?: string;
@@ -258,7 +259,7 @@ export default function ValidatedTemperatureSlider({
               hasError
                 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
                 : isValid
-                  ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                  ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
                   : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
             }`}
           >
@@ -271,7 +272,7 @@ export default function ValidatedTemperatureSlider({
                   hasError
                     ? 'text-red-600 dark:text-red-400'
                     : isValid
-                      ? 'text-green-600 dark:text-green-400'
+                      ? 'text-blue-600 dark:text-blue-400'
                       : 'text-blue-600 dark:text-blue-400'
                 }`}
               >
@@ -288,7 +289,7 @@ export default function ValidatedTemperatureSlider({
                   hasError
                     ? 'text-red-600 dark:text-red-400'
                     : isValid
-                      ? 'text-green-600 dark:text-green-400'
+                      ? 'text-blue-600 dark:text-blue-400'
                       : 'text-blue-600 dark:text-blue-400'
                 }`}
               >

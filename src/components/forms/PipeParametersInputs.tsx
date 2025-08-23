@@ -6,11 +6,11 @@ import { Ruler, Circle, AlertCircle } from 'lucide-react';
 import { THICKNESS_OPTIONS, LENGTH_RANGE } from '@/constants';
 import { ValidatedNumberInput } from './ValidatedInput';
 import { useFieldValidation } from '@/hooks/useFormValidation';
-import { Control, FieldValues } from 'react-hook-form';
-
 interface PipeParametersInputsProps {
-  control: Control<FieldValues>;
-  form: any; // TODO: Create proper type for form from useFormValidation
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: any;
 }
 
 export default function PipeParametersInputs({

@@ -30,7 +30,7 @@ export default function StepIndicator({
               status === 'active'
                 ? step.borderColor
                 : status === 'completed'
-                  ? 'border-green-200 dark:border-green-700'
+                  ? step.borderColor
                   : 'border-slate-200/50 dark:border-slate-700/50 opacity-50'
             } ${onStepClick ? 'cursor-pointer hover:scale-105' : 'cursor-default'}`}
             whileHover={onStepClick ? { scale: 1.05 } : {}}
@@ -41,12 +41,12 @@ export default function StepIndicator({
                 status === 'active'
                   ? 'bg-white/20'
                   : status === 'completed'
-                    ? 'bg-green-100 dark:bg-green-900/30'
+                    ? 'bg-blue-100 dark:bg-blue-900/30'
                     : 'bg-slate-100 dark:bg-slate-800'
               }`}
             >
               {status === 'completed' ? (
-                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <CheckCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               ) : status === 'active' ? (
                 <Icon className="w-5 h-5 text-white" />
               ) : (
@@ -59,7 +59,7 @@ export default function StepIndicator({
                   status === 'active'
                     ? 'text-white'
                     : status === 'completed'
-                      ? 'text-green-700 dark:text-green-300'
+                      ? 'text-blue-700 dark:text-blue-300'
                       : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
@@ -70,7 +70,7 @@ export default function StepIndicator({
                   status === 'active'
                     ? 'text-white/80'
                     : status === 'completed'
-                      ? 'text-green-600 dark:text-green-400'
+                      ? 'text-blue-600 dark:text-blue-400'
                       : 'text-slate-400 dark:text-slate-500'
                 }`}
               >

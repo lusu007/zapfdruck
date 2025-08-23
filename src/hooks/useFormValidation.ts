@@ -12,6 +12,7 @@ interface UseFormValidationOptions<T extends FieldValues>
   showToastErrors?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useFormValidation<T extends FieldValues>({
   schema,
   onSuccess,
@@ -20,7 +21,8 @@ export function useFormValidation<T extends FieldValues>({
   ...formOptions
 }: UseFormValidationOptions<T>) {
   const form = useForm<T>({
-    resolver: zodResolver(schema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(schema as any) as any,
     mode: 'onChange', // Validate on change for better UX
     ...formOptions,
   });
@@ -68,7 +70,7 @@ export function useFormValidation<T extends FieldValues>({
   const isFieldValid = (fieldName: Path<T>): boolean => {
     return (
       !formState.errors[fieldName] &&
-      (formState.dirtyFields as Record<string, unknown>)[fieldName]
+      !!(formState.dirtyFields as Record<string, unknown>)[fieldName]
     );
   };
 
@@ -80,12 +82,14 @@ export function useFormValidation<T extends FieldValues>({
 
   // Helper function to reset form with validation
   const resetForm = (values?: Partial<T>) => {
-    form.reset(values);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    form.reset(values as any);
   };
 
   // Helper function to set field value with validation
   const setFieldValue = (fieldName: Path<T>, value: unknown) => {
-    form.setValue(fieldName, value, {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    form.setValue(fieldName, value as any, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
@@ -111,7 +115,9 @@ export function useFieldValidation<T extends FieldValues>(
 ) {
   const error = form.getFieldError(fieldName);
   const isValid = form.isFieldValid(fieldName);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isDirty = (form.formState.dirtyFields as any)[fieldName];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isTouched = (form.formState.touchedFields as any)[fieldName];
 
   return {
