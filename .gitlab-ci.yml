@@ -1,0 +1,47 @@
+stages:
+  - test
+  - deploy
+
+variables:
+  NODE_VERSION: '18'
+
+cache:
+  paths:
+    - node_modules/
+
+test:
+  stage: test
+  image: node:${NODE_VERSION}
+  script:
+    - npm ci
+    - npm run type-check
+    - npm run lint
+    - npm run build
+  only:
+    - merge_requests
+    - main
+
+deploy-production:
+  stage: deploy
+  image: node:${NODE_VERSION}
+  script:
+    - npm ci
+    - npm run deploy
+  environment:
+    name: production
+    url: https://zapfdruck.your-subdomain.workers.dev
+  only:
+    - main
+  when: manual
+
+deploy-preview:
+  stage: deploy
+  image: node:${NODE_VERSION}
+  script:
+    - npm ci
+    - npm run deploy:preview
+  environment:
+    name: preview
+    url: https://zapfdruck-preview.your-subdomain.workers.dev
+  only:
+    - merge_requests

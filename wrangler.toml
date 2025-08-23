@@ -1,0 +1,22 @@
+name = "zapfdruck"
+main = ".open-next/worker.js"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+account_id = "f9289a178a22e694e803e86457fe8c0b"
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[env.production]
+name = "zapfdruck"
+
+[env.preview]
+name = "zapfdruck-preview"
+
+[vars]
+ENVIRONMENT = "production"
+
+[env.preview.vars]
+ENVIRONMENT = "preview"
