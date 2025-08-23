@@ -525,11 +525,11 @@ export default function IntegratedCalculatorForm({
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 flex justify-between"
+                    className="mt-6 flex flex-col sm:flex-row gap-4 sm:justify-between"
                   >
                     <button
                       onClick={() => handleGoBack(2)}
-                      className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                      className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
                     >
                       <ArrowLeft className="w-4 h-4" />
                       <span>Zurück</span>
@@ -542,7 +542,7 @@ export default function IntegratedCalculatorForm({
                           !validationStates.canProceedToStep3 ||
                           !form.watch('height')
                         }
-                        className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                        className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
                           validationStates.canProceedToStep3 &&
                           form.watch('height')
                             ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl'

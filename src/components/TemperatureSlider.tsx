@@ -41,8 +41,9 @@ export default function TemperatureSlider({
 
   const getPercentage = (val: number) => ((val - min) / (max - min)) * 100;
 
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent, thumb: 'min' | 'max') => {
+  // Generic pointer event handlers that work for both mouse and touch
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent, thumb: 'min' | 'max') => {
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(thumb);
@@ -50,8 +51,8 @@ export default function TemperatureSlider({
     []
   );
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
+  const handlePointerMove = useCallback(
+    (e: PointerEvent) => {
       if (!isDragging || !sliderRef.current) return;
 
       const rect = sliderRef.current.getBoundingClientRect();
@@ -74,21 +75,21 @@ export default function TemperatureSlider({
     [isDragging, onChange, rangeValue, min, max]
   );
 
-  const handleMouseUp = useCallback(() => {
+  const handlePointerUp = useCallback(() => {
     setIsDragging(null);
   }, []);
 
   useEffect(() => {
     if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('pointermove', handlePointerMove);
+      document.addEventListener('pointerup', handlePointerUp);
       return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('pointermove', handlePointerMove);
+        document.removeEventListener('pointerup', handlePointerUp);
       };
     }
     return undefined;
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  }, [isDragging, handlePointerMove, handlePointerUp]);
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
@@ -171,7 +172,7 @@ export default function TemperatureSlider({
       <div className="space-y-3">
         <div
           ref={sliderRef}
-          className="relative h-12 cursor-pointer"
+          className="relative h-12 cursor-pointer touch-none"
           onClick={handleClick}
         >
           {/* Track */}
@@ -188,9 +189,9 @@ export default function TemperatureSlider({
 
           {/* Min thumb */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white dark:bg-slate-300 rounded-full shadow-lg border-2 border-blue-500 cursor-pointer hover:scale-110 transition-transform"
+            className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white dark:bg-slate-300 rounded-full shadow-lg border-2 border-blue-500 cursor-pointer hover:scale-110 transition-transform touch-none"
             style={{ left: `calc(${getPercentage(rangeValue[0])}% - 12px)` }}
-            onMouseDown={e => handleMouseDown(e, 'min')}
+            onPointerDown={e => handlePointerDown(e, 'min')}
             aria-label={`Min temperature ${rangeValue[0]}°C`}
             role="slider"
             aria-valuemin={min}
@@ -204,9 +205,9 @@ export default function TemperatureSlider({
 
           {/* Max thumb */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white dark:bg-slate-300 rounded-full shadow-lg border-2 border-blue-500 cursor-pointer hover:scale-110 transition-transform"
+            className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white dark:bg-slate-300 rounded-full shadow-lg border-2 border-blue-500 cursor-pointer hover:scale-110 transition-transform touch-none"
             style={{ left: `calc(${getPercentage(rangeValue[1])}% - 12px)` }}
-            onMouseDown={e => handleMouseDown(e, 'max')}
+            onPointerDown={e => handlePointerDown(e, 'max')}
             aria-label={`Max temperature ${rangeValue[1]}°C`}
             role="slider"
             aria-valuemin={min}
