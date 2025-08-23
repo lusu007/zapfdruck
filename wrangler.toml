@@ -20,3 +20,10 @@ ENVIRONMENT = "production"
 
 [env.preview.vars]
 ENVIRONMENT = "preview"
+
+[observability]
+enabled = true
+head_sampling_rate = 1.0
+
+[observability.logs]
+invocation_logs = true
