@@ -26,6 +26,8 @@ export interface StepNavigationProps {
   onPrevious: () => void;
   nextButtonText?: string;
   previousButtonText?: string;
+  showResultButton?: boolean;
+  onShowResult?: () => void;
   className?: string;
 }
 

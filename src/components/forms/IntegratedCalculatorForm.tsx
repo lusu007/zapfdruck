@@ -10,6 +10,7 @@ import {
   CheckCircle,
   Clock,
   Info,
+  TrendingUp,
 } from 'lucide-react';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import {
@@ -29,6 +30,7 @@ interface IntegratedCalculatorFormProps {
   onComplete?: (data: PressureCalculationFormData) => void;
   onStepChange?: (step: number) => void;
   currentStep?: number;
+  onShowResult?: () => void;
 }
 
 // Memoized step configuration
@@ -66,6 +68,7 @@ export default function IntegratedCalculatorForm({
   onComplete,
   onStepChange,
   currentStep: externalCurrentStep,
+  onShowResult,
 }: IntegratedCalculatorFormProps) {
   const { setForm, calculatePressure } = usePressureStore();
   const [internalCurrentStep, setInternalCurrentStep] = React.useState(1);
@@ -93,8 +96,8 @@ export default function IntegratedCalculatorForm({
     schema: pressureCalculationSchema,
     defaultValues: {
       temperatureRange: [10, 12],
-      height: 0,
-      length: 0,
+      height: undefined,
+      length: undefined,
       thickness: 0.01,
     },
     onSuccess: async data => {
@@ -127,8 +130,8 @@ export default function IntegratedCalculatorForm({
     const canProceedToStep2 = hasValidTemperatureSelection;
 
     // Manual validation for pipe parameters
-    const hasValidLength = lengthValue > 0;
-    const hasValidThickness = thicknessValue > 0;
+    const hasValidLength = lengthValue && lengthValue > 0;
+    const hasValidThickness = thicknessValue && thicknessValue > 0;
 
     const canProceedToStep3 = hasValidLength && hasValidThickness;
 
@@ -156,9 +159,9 @@ export default function IntegratedCalculatorForm({
       temperatureValue[0] <= temperatureValue[1] &&
       temperatureValue[1] - temperatureValue[0] >= 0.5;
 
-    const hasValidHeight = heightValue > 0;
-    const hasValidLength = lengthValue > 0;
-    const hasValidThickness = thicknessValue > 0;
+    const hasValidHeight = heightValue && heightValue > 0;
+    const hasValidLength = lengthValue && lengthValue > 0;
+    const hasValidThickness = thicknessValue && thicknessValue > 0;
 
     if (
       hasValidTemperature &&
@@ -522,7 +525,7 @@ export default function IntegratedCalculatorForm({
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 flex justify-start"
+                    className="mt-6 flex justify-between"
                   >
                     <button
                       onClick={() => handleGoBack(2)}
@@ -531,6 +534,25 @@ export default function IntegratedCalculatorForm({
                       <ArrowLeft className="w-4 h-4" />
                       <span>Zurück</span>
                     </button>
+
+                    {onShowResult && (
+                      <button
+                        onClick={onShowResult}
+                        disabled={
+                          !validationStates.canProceedToStep3 ||
+                          !form.watch('height')
+                        }
+                        className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                          validationStates.canProceedToStep3 &&
+                          form.watch('height')
+                            ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl'
+                            : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
+                        }`}
+                      >
+                        <TrendingUp className="w-4 h-4" />
+                        <span>Ergebnis anzeigen</span>
+                      </button>
+                    )}
                   </motion.div>
                 )}
               </div>

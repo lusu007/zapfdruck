@@ -8,6 +8,7 @@ import LivePressureResult from '@/components/LivePressureResult';
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isResultHighlighted, setIsResultHighlighted] = useState(false);
 
   // Memoized step indicators
   const stepIndicators = useMemo(() => [1, 2, 3], []);
@@ -34,6 +35,26 @@ export default function Home() {
         top: elementPosition,
         behavior: 'smooth',
       });
+    }
+  }, []);
+
+  const handleScrollToResult = useCallback(() => {
+    const element = document.getElementById('live-pressure-result');
+    if (element) {
+      const navbarHeight = 80;
+      const elementPosition = element.offsetTop - navbarHeight - 20;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth',
+      });
+
+      // Trigger highlight animation
+      setIsResultHighlighted(true);
+
+      // Reset highlight after animation completes
+      setTimeout(() => {
+        setIsResultHighlighted(false);
+      }, 1000);
     }
   }, []);
 
@@ -145,12 +166,12 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="flex items-center justify-center mb-8"
+            className="flex items-center justify-center mb-8 px-4"
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 max-w-full overflow-hidden">
               {stepIndicators.map((step, index) => (
-                <div key={step} className="flex items-center">
-                  <div className="flex flex-col items-center gap-2">
+                <div key={step} className="flex items-center flex-shrink-0">
+                  <div className="flex flex-col items-center gap-1 sm:gap-2">
                     <button
                       onClick={() => {
                         // Only allow navigation to completed steps or the current step
@@ -161,7 +182,7 @@ export default function Home() {
                           setCurrentStep(step);
                         }
                       }}
-                      className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all ${
+                      className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 transition-all ${
                         getStepStatus(step) === 'completed'
                           ? 'bg-blue-500 border-blue-500 text-white shadow-lg hover:bg-blue-600 hover:shadow-xl cursor-pointer'
                           : getStepStatus(step) === 'active'
@@ -177,12 +198,14 @@ export default function Home() {
                             : `Schritt ${step} noch nicht verfügbar`
                       }
                     >
-                      <span className="font-semibold text-lg">{step}</span>
+                      <span className="font-semibold text-base sm:text-lg">
+                        {step}
+                      </span>
                     </button>
                   </div>
                   {index < stepIndicators.length - 1 && (
                     <div
-                      className={`w-20 h-1 mx-6 transition-colors ${
+                      className={`w-8 sm:w-12 md:w-20 h-1 mx-2 sm:mx-4 md:mx-6 transition-colors ${
                         getStepStatus(step) === 'completed'
                           ? 'bg-blue-500'
                           : 'bg-slate-300 dark:bg-slate-600'
@@ -205,13 +228,14 @@ export default function Home() {
                 onComplete={handleCalculationComplete}
                 onStepChange={handleStepChange}
                 currentStep={currentStep}
+                onShowResult={handleScrollToResult}
               />
             </div>
 
             {/* Sidebar - Live Results Only */}
             <div>
               {/* Live Pressure Result */}
-              <LivePressureResult />
+              <LivePressureResult isHighlighted={isResultHighlighted} />
             </div>
           </div>
         </div>
@@ -219,9 +243,10 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-t border-slate-200 dark:border-slate-700 mt-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-2 mb-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="text-center space-y-4 sm:space-y-6">
+            {/* Logo and Title */}
+            <div className="flex items-center justify-center gap-2">
               <div className="p-2 bg-amber-500 rounded-lg">
                 <Beer className="w-4 h-4 text-white" />
               </div>
@@ -229,20 +254,20 @@ export default function Home() {
                 Zapfdruck Rechner
               </h3>
             </div>
-            <div className="mb-4">
-              <p className="text-xs text-slate-500 dark:text-slate-500 max-w-2xl mx-auto mt-2">
+
+            {/* Disclaimer */}
+            <div>
+              <p className="text-xs text-slate-500 dark:text-slate-500 max-w-2xl mx-auto px-4">
                 Es wird keine Gewähr über Richtigkeit der Werte übernommen! Die
                 Berechnungen basieren auf allgemeinen Formeln und können je nach
                 spezifischen Bedingungen variieren.
               </p>
             </div>
-            <div className="flex items-center justify-center gap-6 text-xs text-slate-500 dark:text-slate-500">
-              <span>
-                © {new Date().getFullYear()} Scelus Development (Lukas Jost)
-              </span>
-              <span>•</span>
-              <span>Wir ❤️ Open Source</span>
-              <span>•</span>
+
+            {/* Links */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-xs text-slate-500 dark:text-slate-500">
+              <span className="hidden sm:inline">Wir ❤️ Open Source</span>
+              <span className="hidden sm:inline">•</span>
               <a
                 href="https://github.com/lusu007/zapfdruck"
                 target="_blank"
@@ -259,6 +284,17 @@ export default function Home() {
                 </svg>
                 GitHub
               </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Copyright - At the very bottom */}
+        <div className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+            <div className="text-center">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                © {new Date().getFullYear()} Scelus Development (Lukas Jost)
+              </p>
             </div>
           </div>
         </div>

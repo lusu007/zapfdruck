@@ -31,7 +31,13 @@ const TEMPERATURE_PRESSURE_MAP = [
   { temperature: 26, pressure: 2.5 },
 ] as const;
 
-export default function LivePressureResult() {
+interface LivePressureResultProps {
+  isHighlighted?: boolean;
+}
+
+export default function LivePressureResult({
+  isHighlighted = false,
+}: LivePressureResultProps) {
   const { form } = usePressureStore();
 
   // Extract form values to avoid complex expressions in dependencies
@@ -48,7 +54,7 @@ export default function LivePressureResult() {
       return null;
     }
 
-    if (height === 0 || length === 0 || thickness === 0) {
+    if (!height || !length || !thickness) {
       return null;
     }
 
@@ -125,10 +131,33 @@ export default function LivePressureResult() {
 
   return (
     <motion.div
+      id="live-pressure-result"
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2, duration: 0.6 }}
-      className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden"
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: isHighlighted ? [1, 1.02, 1] : 1,
+        boxShadow: isHighlighted
+          ? [
+              '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              '0 25px 50px -12px rgba(59, 130, 246, 0.25)',
+              '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            ]
+          : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+      }}
+      transition={{
+        delay: 0.2,
+        duration: 0.6,
+        scale: isHighlighted ? { duration: 0.6, ease: 'easeInOut' } : undefined,
+        boxShadow: isHighlighted
+          ? { duration: 0.6, ease: 'easeInOut' }
+          : undefined,
+      }}
+      className={`bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl shadow-xl border overflow-hidden transition-all duration-300 ${
+        isHighlighted
+          ? 'border-indigo-400 dark:border-indigo-500 ring-2 ring-indigo-200 dark:ring-indigo-800'
+          : 'border-slate-200/50 dark:border-slate-700/50'
+      }`}
     >
       <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
         <div className="flex items-center gap-3">
@@ -178,8 +207,21 @@ export default function LivePressureResult() {
               <div className="text-center">
                 <motion.div
                   initial={{ scale: 0.9 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                  animate={{
+                    scale: isHighlighted ? [1, 1.05, 1] : 1,
+                    y: isHighlighted ? [0, -5, 0] : 0,
+                  }}
+                  transition={{
+                    delay: 0.2,
+                    type: 'spring',
+                    stiffness: 200,
+                    scale: isHighlighted
+                      ? { duration: 0.8, ease: 'easeInOut' }
+                      : undefined,
+                    y: isHighlighted
+                      ? { duration: 0.8, ease: 'easeInOut' }
+                      : undefined,
+                  }}
                   className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-6 border border-indigo-200 dark:border-indigo-800"
                 >
                   <div className="flex items-center justify-center gap-2 mb-2">
@@ -261,7 +303,7 @@ export default function LivePressureResult() {
                       Höhe:
                     </span>
                     <span className="font-medium text-slate-900 dark:text-white">
-                      {form.height > 0 ? `${form.height}m` : 'Nicht gesetzt'}
+                      {form.height ? `${form.height}m` : 'Nicht gesetzt'}
                     </span>
                   </div>
 
@@ -270,7 +312,7 @@ export default function LivePressureResult() {
                       Länge:
                     </span>
                     <span className="font-medium text-slate-900 dark:text-white">
-                      {form.length > 0 ? `${form.length}m` : 'Nicht gesetzt'}
+                      {form.length ? `${form.length}m` : 'Nicht gesetzt'}
                     </span>
                   </div>
 
