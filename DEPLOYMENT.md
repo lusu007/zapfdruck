@@ -162,7 +162,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
@@ -217,6 +217,7 @@ OpenNext führt folgende Schritte aus:
 
 - Stelle sicher, dass `nodejs_compat` Flag aktiviert ist
 - Überprüfe die Next.js Version (15.4.7 wird unterstützt)
+- **Node.js Version**: OpenNext benötigt Node.js 20+ (yargs-parser Anforderung)
 
 ### Deployment-Fehler
 
@@ -229,6 +230,33 @@ OpenNext führt folgende Schritte aus:
 - Workflow-Logs in GitHub Actions überprüfen
 - API Token Berechtigungen überprüfen
 - Branch-Name überprüfen (muss `main` sein)
+
+#### Authentifizierungsfehler beheben
+
+Falls du den Fehler `Unable to authenticate request [code: 10001]` siehst:
+
+1. **API Token überprüfen**:
+   - Gehe zu [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens)
+   - Stelle sicher, dass der Token die richtigen Berechtigungen hat:
+     - **Account**: Workers Scripts (Edit)
+     - **Zone**: Workers Routes (Edit)
+   - Token neu generieren falls nötig
+
+2. **GitHub Secrets überprüfen**:
+   - Repository → Settings → Secrets and variables → Actions
+   - `CLOUDFLARE_API_TOKEN` sollte gesetzt sein
+   - Secret neu setzen falls nötig
+
+3. **Lokale Authentifizierung testen**:
+
+   ```bash
+   npm run cf:login
+   npm run cf:whoami
+   ```
+
+4. **Workflow-Debugging**:
+   - Füge `--debug` Flag zum Wrangler-Befehl hinzu
+   - Überprüfe die GitHub Actions Logs für Details
 
 ### Performance-Optimierungen
 
