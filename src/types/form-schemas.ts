@@ -39,8 +39,8 @@ export const pressureCalculationSchema = z.object({
       message: 'Temperaturbereich muss mindestens 0.5°C betragen',
       path: ['temperatureRange'],
     }),
-  height: heightSchema,
-  length: lengthSchema,
+  height: heightSchema.optional(),
+  length: lengthSchema.optional(),
   thickness: thicknessSchema,
 });
 
