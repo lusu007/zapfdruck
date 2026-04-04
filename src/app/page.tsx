@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Beer, ArrowRight } from 'lucide-react';
 import IntegratedCalculatorForm from '@/components/forms/IntegratedCalculatorForm';

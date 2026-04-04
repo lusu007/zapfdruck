@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   BarChart3,
@@ -71,15 +71,15 @@ export default function IntegratedCalculatorForm({
   onShowResult,
 }: IntegratedCalculatorFormProps) {
   const { setForm, calculatePressure } = usePressureStore();
-  const [internalCurrentStep, setInternalCurrentStep] = React.useState(1);
+  const [internalCurrentStep, setInternalCurrentStep] = useState(1);
 
   // Use external currentStep if provided, otherwise use internal state
   const currentStep = externalCurrentStep ?? internalCurrentStep;
 
   // Update internal state when external step changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (externalCurrentStep && externalCurrentStep !== internalCurrentStep) {
-      setInternalCurrentStep(externalCurrentStep);
+      queueMicrotask(() => setInternalCurrentStep(externalCurrentStep));
     }
   }, [externalCurrentStep, internalCurrentStep]);
 
@@ -146,7 +146,7 @@ export default function IntegratedCalculatorForm({
   }, [temperatureValue, lengthValue, thicknessValue]);
 
   // Auto-calculate pressure when all form fields are valid
-  React.useEffect(() => {
+  useEffect(() => {
     const temperatureValue = form.watch('temperatureRange');
     const heightValue = form.watch('height');
     const lengthValue = form.watch('length');
@@ -189,7 +189,6 @@ export default function IntegratedCalculatorForm({
     }
 
     return undefined;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   });
 
   // Memoized step handlers
@@ -222,7 +221,7 @@ export default function IntegratedCalculatorForm({
   );
 
   // Update step indicator when currentStep changes
-  React.useEffect(() => {
+  useEffect(() => {
     onStepChange?.(currentStep);
   }, [currentStep, onStepChange]);
 

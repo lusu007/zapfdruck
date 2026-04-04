@@ -2,16 +2,10 @@
 
 import { motion } from 'framer-motion';
 import { BarChart3 } from 'lucide-react';
-
-const PRESSURE_DATA = [
-  { temperature: 5, pressure: 0.8 },
-  { temperature: 10, pressure: 1.2 },
-  { temperature: 15, pressure: 1.6 },
-  { temperature: 20, pressure: 2.0 },
-  { temperature: 25, pressure: 2.4 },
-];
+import { getSaturationPressureTableSampleRows } from '@/constants/saturation-pressure';
 
 export default function PressureTable() {
+  const pressureRows = getSaturationPressureTableSampleRows();
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
@@ -45,7 +39,7 @@ export default function PressureTable() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {PRESSURE_DATA.map((row, index) => (
+            {pressureRows.map((row, index) => (
               <motion.tr
                 key={row.temperature}
                 initial={{ opacity: 0, x: -20 }}

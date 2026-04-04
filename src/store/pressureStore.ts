@@ -1,10 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import {
-  CalculationForm,
-  PressureCalculation,
-  TemperaturePressure,
-} from '@/types';
+import { getSaturationPressureBar } from '@/constants/saturation-pressure';
+import { CalculationForm, PressureCalculation } from '@/types';
 
 interface PressureStore {
   form: CalculationForm;
@@ -16,41 +13,6 @@ interface PressureStore {
   resetForm: () => void;
   clearError: () => void;
 }
-
-// Memoized temperature to pressure mapping
-const TEMPERATURE_PRESSURE_MAP: readonly TemperaturePressure[] = [
-  { temperature: 5, pressure: 0.8 },
-  { temperature: 6, pressure: 0.9 },
-  { temperature: 7, pressure: 1.0 },
-  { temperature: 8, pressure: 1.0 },
-  { temperature: 9, pressure: 1.1 },
-  { temperature: 10, pressure: 1.2 },
-  { temperature: 11, pressure: 1.3 },
-  { temperature: 12, pressure: 1.4 },
-  { temperature: 13, pressure: 1.5 },
-  { temperature: 14, pressure: 1.5 },
-  { temperature: 15, pressure: 1.6 },
-  { temperature: 16, pressure: 1.7 },
-  { temperature: 17, pressure: 1.8 },
-  { temperature: 18, pressure: 1.9 },
-  { temperature: 19, pressure: 1.9 },
-  { temperature: 20, pressure: 2.0 },
-  { temperature: 21, pressure: 2.0 },
-  { temperature: 22, pressure: 2.1 },
-  { temperature: 23, pressure: 2.2 },
-  { temperature: 24, pressure: 2.3 },
-  { temperature: 25, pressure: 2.4 },
-  { temperature: 26, pressure: 2.5 },
-] as const;
-
-// Optimized pressure lookup with Map for O(1) access
-const PRESSURE_MAP = new Map(
-  TEMPERATURE_PRESSURE_MAP.map(tp => [tp.temperature, tp.pressure])
-);
-
-const getPressureForTemperature = (temperature: number): number => {
-  return PRESSURE_MAP.get(temperature) ?? 0;
-};
 
 const roundToDecimal = (value: number, decimals: number = 1): number => {
   const multiplier = Math.pow(10, decimals);
@@ -171,8 +133,8 @@ export const usePressureStore = create<PressureStore>()(
         await new Promise(resolve => setTimeout(resolve, 100));
 
         // Get base pressure for temperature range
-        const pressureMin = getPressureForTemperature(temperatureRange[0]);
-        const pressureMax = getPressureForTemperature(temperatureRange[1]);
+        const pressureMin = getSaturationPressureBar(temperatureRange[0]);
+        const pressureMax = getSaturationPressureBar(temperatureRange[1]);
 
         // Calculate height pressure (0.1 bar per meter)
         const heightPressure = height * 0.1;
@@ -227,7 +189,7 @@ export const usePressureStore = create<PressureStore>()(
           isLoading: false,
           error: null,
         });
-      } catch (error) {
+      } catch {
         set({
           result: null,
           error: 'Fehler bei der Berechnung',

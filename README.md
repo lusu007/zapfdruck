@@ -86,7 +86,7 @@ src/
 
 ### Voraussetzungen
 
-- Node.js 18+
+- Node.js 24 or newer (see `engines` in `package.json`; use `nvm use` to match [`.nvmrc`](.nvmrc) / CI patch version when possible)
 - npm oder yarn
 
 ### Installation

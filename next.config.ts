@@ -1,14 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // OpenNext handles the build process
-  turbopack: {
-    rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
-  },
+  // OpenNext handles the production Workers build; use `npm run dev` for local dev.
 };
 
 export default nextConfig;

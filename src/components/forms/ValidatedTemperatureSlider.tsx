@@ -3,7 +3,15 @@
 import { useController } from 'react-hook-form';
 import { Thermometer, Info, AlertCircle } from 'lucide-react';
 
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  type PointerEvent as ReactPointerEvent,
+  type MouseEvent as ReactMouseEvent,
+} from 'react';
 import { TEMPERATURE_RANGE } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -52,7 +60,7 @@ export default function ValidatedTemperatureSlider({
 
   // Generic pointer event handlers that work for both mouse and touch
   const handlePointerDown = useCallback(
-    (e: React.PointerEvent, thumb: 'min' | 'max') => {
+    (e: ReactPointerEvent, thumb: 'min' | 'max') => {
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(thumb);
@@ -104,7 +112,7 @@ export default function ValidatedTemperatureSlider({
   }, [isDragging, handlePointerMove, handlePointerUp]);
 
   const handleClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: ReactMouseEvent) => {
       if (isDragging) return;
 
       if (!sliderRef.current) return;
