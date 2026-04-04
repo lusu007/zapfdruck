@@ -4,15 +4,16 @@ import { toast } from 'react-hot-toast';
 
 import { z } from 'zod';
 
-interface UseFormValidationOptions<T extends FieldValues>
-  extends Omit<UseFormProps<T>, 'resolver'> {
+interface UseFormValidationOptions<T extends FieldValues> extends Omit<
+  UseFormProps<T>,
+  'resolver'
+> {
   schema: z.ZodSchema<T>;
   onSuccess?: (data: T) => void | Promise<void>;
   onError?: (errors: Record<string, unknown>) => void;
   showToastErrors?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useFormValidation<T extends FieldValues>({
   schema,
   onSuccess,
@@ -35,7 +36,7 @@ export function useFormValidation<T extends FieldValues>({
         if (onSuccess) {
           await onSuccess(data);
         }
-      } catch (error) {
+      } catch {
         if (showToastErrors) {
           toast.error(
             'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'

@@ -14,7 +14,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24.14.1'
           cache: 'npm'
 
       - name: Install deps
@@ -23,8 +23,14 @@ jobs:
       - name: Type check
         run: npm run type-check
 
+      - name: Prettier
+        run: npm run format:check
+
       - name: Lint
         run: npm run lint
+
+      - name: Build
+        run: npm run build
 
   deploy:
     needs: test
@@ -38,7 +44,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24.14.1'
           cache: 'npm'
 
       - name: Install deps

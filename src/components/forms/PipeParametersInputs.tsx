@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Ruler, Circle, AlertCircle } from 'lucide-react';
 import { THICKNESS_OPTIONS, LENGTH_RANGE } from '@/constants';
@@ -19,8 +19,7 @@ export default function PipeParametersInputs({
 }: PipeParametersInputsProps) {
   // Get current thickness from form, default to 0.01 if not set
   const currentThickness = form.watch('thickness') || 0.01;
-  const [selectedThickness, setSelectedThickness] =
-    React.useState(currentThickness);
+  const [selectedThickness, setSelectedThickness] = useState(currentThickness);
 
   const handleThicknessChange = (value: number) => {
     setSelectedThickness(value);

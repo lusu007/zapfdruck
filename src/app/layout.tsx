@@ -1,5 +1,10 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+import type { ReactNode } from 'react';
 import './globals.css';
+
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+};
 
 export const metadata: Metadata = {
   title: 'Zapfdruck Rechner - Beer Pressure Calculator',
@@ -14,45 +19,21 @@ export const metadata: Metadata = {
     locale: 'de_DE',
   },
   icons: {
-    icon: '/img/favicon-32x32.png',
-    apple: '/img/apple-touch-icon.png',
+    apple: '/favicon.ico',
   },
   manifest: '/img/site.webmanifest',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="de">
       <head>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/img/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/img/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/img/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/img/site.webmanifest" />
         <link
           rel="mask-icon"
           href="/img/safari-pinned-tab.svg"
           color="#5bbad5"
         />
         <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#ffffff" />
       </head>
       <body>{children}</body>
     </html>
