@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Workers
+name: CI and Deploy
 
 on:
   push:
@@ -7,12 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
     steps:
       - uses: actions/checkout@v4
 
@@ -24,23 +20,29 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Print wrangler version
-        run: npx wrangler --version
-
       - name: Type check
         run: npm run type-check
 
       - name: Lint
         run: npm run lint
 
-      # Optional: nur zum Testen, wenn Token korrekt
-      - name: Check Cloudflare auth
-        run: npx wrangler whoami
+  deploy:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
 
       - name: Deploy to Cloudflare Workers
-        if: github.ref == 'refs/heads/main'
         run: npm run deploy
-
-      - name: Deploy Preview (PR)
-        if: github.event_name == 'pull_request'
-        run: npm run deploy:preview
